@@ -16,7 +16,7 @@ O RAG é uma aplicação no modelo de perguntas e respostas, onde é realizada u
 
 
 # Setup
-Para este projeto serão necessários os sequintes components instalados:
+Para este projeto serão necessárias as sequintes dependências:
 - `langchain-google-genai >= 2.1.6 `
 - `langchain-chroma >= 0.2.4`
 - `langchain-community >= 0.3.27`
@@ -24,30 +24,63 @@ Para este projeto serão necessários os sequintes components instalados:
 - `langchain-core >= 0.3.68`
 - `langchain >= 0.3.26`
 
-Para  realizar a instalação dos components citados acima, execute no terminal o comando:
+Dependências built-in:
+- `os`
+- `typing_extensions`
+
+Para  realizar a instalação das dependências citadas acima, execute no terminal o comando:
 ```{python}
 pip install langchain-google-genai langchain-chroma langchain-community langchain-text-splitters langchain-core langchain
 ```
-
-Outros components built-in:
-- `Python >= 3.12`
-- `os`
-- `typing_extensions`
 
 Para obter uma cópia deste repositório execute o comando:
 ```bash
 git clone git@github.com:maridiniz/simple-rag-application.git
 ```
 
-Método alternativo em casos de HTTP:
-```bash
-git clone https://github.com/maridiniz/simple-rag-application.git
+
+Para prosseguir com o projeto é necessário utilizar um LLM que fará o processo de vetorização, indexação e também participará do processo de gerar o output para o usuário, por tanto,  será necessária utilizar uma chave de API de algum modelo de LLM ou utilizar um modelo local. Para definir a chave de API do modelo LLM escolhido em uma variável de ambiente:
+
 ```
+1. opção através do powersehll (Método persiste mesmo após reiniciar o sistema):
+[System.Environment]::SetEnvironmentVariable('GOOGLE_API_KEY', 'insira aqui sua chave', 'User')
+```
+
+```
+2. opção ataravés do CMD (Método permance mesmo após reiniciar):
+setx GOOGLE_API_KEY "insira-aqui-sua-chave"
+```
+
+Para verificar se funcionou:
+```
+powershell: echo $env:GOOGLE_API_KEY
+
+cmd: echo %GOOGLE_API_KEY%
+```
+
+Outra alternativa com o módulo getpass:
+```
+import getpass
+import os
+
+if not os.environ.get("GOOGLE_API_KEY"):
+  os.environ["GOOGLE_API_KEY"] = getpass.getpass("Insira sua chave de API aqui: ")
+```
+
 
 # Estrutura do projeto
 A aplicação segue 5 (cinco) passos simples:
-- O primeiro passo realiza o processamento dos arquivos que desejamos obter respostas.
-- O segundo passo se encarrega de realizar a vetorização dos textos destes documentos e armazenamento dos vetores/embeddings em um banco de dados, que neste caso é local.
-- O terceiro passo organiza a parte de recuperação dos textos armazenados ataravés de uma busca por similaridade.
-- O quarto passo trata de gerar uma resposta ao usuário (gerado pelo llm) com base na pergunta e no contexto.
-- O quinto e último passo trata de como unir todos esses quatro passos da nossa aplicação com LangGraph.
+
+1. O primeiro passo define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Ao final, poderemos realizar perguntas e obter respostas com base em nossos próprios arquivos.
+
+
+2. O segundo passo define todo o processo de vetorização e indexação dos arquivos que foram previamente carregados e splitados no primeiro passo.
+
+
+3. O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2 e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário.
+
+
+4. O quarto passo é onde definimos a mensagem que será passada ao llm para que o output para o usuário seja gerado.
+
+
+5. O quinto e último passo é onde agrupamos todos os passos anteriores para compilar nossa aplicação.   
