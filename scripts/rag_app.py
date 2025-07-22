@@ -41,7 +41,7 @@ def main():
            continue
 
 
-# Esse passo define o carregamento e divisão dos arquivos em partes menores:
+# 1. Passo, define o carregamento e divisão dos arquivos em partes menores:
 def text_loading_splitting(directory_path: str = "./files") -> List[Document]:
     """Carrega os documentos e divide em várias partes menores ."""
 
@@ -67,7 +67,7 @@ def text_loading_splitting(directory_path: str = "./files") -> List[Document]:
     return all_splits
 
 
-# Passo responsável pela vetorização e indexação dos arquivos já processados:
+# 2. Passo, responsável pela vetorização e indexação dos arquivos já processados:
 def vectorization(documents: List[Document], persist_directory: str = "../../../chroma_langchain_db"):
     """vetoriza e indexa os arquivos em um diretório local."""
 
@@ -133,7 +133,7 @@ class State(TypedDict):
     answer: str
 
 
-# Passo que define a busca dos arquivos indexados:
+# 3. Passo, define a busca dos arquivos indexados:
 def retrieve(state: State, vector_store: Chroma) -> dict:
     """Realiza busca nos arquivos indexados."""
 
@@ -141,7 +141,7 @@ def retrieve(state: State, vector_store: Chroma) -> dict:
     return {"context": doc_retrieved}
 
 
-# Passo que gera uma resposta ao usuário com o llm:
+# 4. Passo, gera uma resposta ao usuário com o llm:
 def generate(state: State, llm: ChatGoogleGenerativeAI) -> dict:
     """Pega os dados buscados, a pergunta e gera uma resposta com o llm."""
 
@@ -169,7 +169,7 @@ def generate(state: State, llm: ChatGoogleGenerativeAI) -> dict:
     return {"answer": response.content}
 
 
-# Agrupa todos os passos da aplicação com LangGraph:
+# 5. passo, agrupa todos os passos da aplicação com LangGraph:
 def langgraph_wrapper(vector_store: Chroma, llm: ChatGoogleGenerativeAI):
 
     workflow = StateGraph(State)
