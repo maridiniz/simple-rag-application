@@ -71,16 +71,18 @@ if not os.environ.get("GOOGLE_API_KEY"):
 # Estrutura do projeto
 A aplicação segue cinco passos:
 
-1. O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados de um diretório e contidos em um único objeto como várias unidades de texto. Ao final, essas unidades de textos sáo divididas em várias partes menores para que sejam futuramente transformados em embeddings.
+1. O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados de um diretório e contidos em um único objeto como uma unidade de texto. Ao final, essa unidade de texto é dividida em várias partes menores para que sejam futuramente transformados em embeddings.
+
+![](/image/data_processing.png)
+
+2. O segundo passo define todo o processo de vetorização e indexação dos arquivos que foram previamente carregados e splitados no primeiro passo. Nesse passo é utilizado um modelo de llm para transformar cada pedaço de text em embedding, que é quando é atribuído um valor numérico para cada pedaço de texto. Posteriormente, ocorre a indexação desses embeddings, que é o armazenamento em banco de dados local com o cliente Chroma.
+![](/image/)
 
 
-2. O segundo passo define todo o processo de vetorização e indexação dos arquivos que foram previamente carregados e splitados no primeiro passo.
+4. O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2 e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário.
 
 
-3. O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2 e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário.
+5. O quarto passo é onde definimos a mensagem que será passada ao llm para que o output para o usuário seja gerado.
 
 
-4. O quarto passo é onde definimos a mensagem que será passada ao llm para que o output para o usuário seja gerado.
-
-
-5. O quinto e último passo é onde agrupamos todos os passos anteriores para compilar nossa aplicação.   
+6. O quinto e último passo é onde agrupamos todos os passos anteriores para compilar nossa aplicação.   
