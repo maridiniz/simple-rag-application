@@ -72,7 +72,7 @@ if not os.environ.get("GOOGLE_API_KEY"):
 A aplicação segue cinco passos:
 
 1. O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados de um diretório e contidos em um único objeto como várias unidades de texto. Ao final, essas unidades de textos sáo divididas em várias partes menores para que sejam futuramente transformados em embeddings.
-![](/image/data_processing.png)
+
 
 2. O segundo passo define todo o processo de vetorização e indexação dos arquivos que foram previamente carregados e splitados no primeiro passo.
 
