@@ -10,7 +10,7 @@
 
 
 # Objetivo do projeto
-O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vectorização e generation, assim como também o Chroma client para indexição dos embeddings localmente (no caso deste projeto) e posteriormente o passo de retrieval. Também é possível utilizar ainda em conjunto outros frameworks para observabilidade da nossa aplicação, como por example o LangSmith, onde é possível monitorar, realizar debug e etc. Porém, para este projeto, este último passo não será abordado, caso tenha intersse, veja como integrar este passo no aplicação, acesse [aqui](https://docs.smith.langchain.com/observability). É possível encontrar todas as informações diretamenta na documentação official do LangChain neste [link](https://python.langchain.com/docs/introduction/). Quanto a documentação official do LangGraph, acesse [aqui.](https://langchain-ai.github.io/langgraph/)
+O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vetorização e generação do output, assim como também o Chroma client para indexição dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação. Também é possível utilizar ainda em conjunto outros frameworks para observabilidade da nossa aplicação, como por example o LangSmith, onde é possível monitorar, realizar debug e etc. Porém, para este projeto, este último passo não será abordado, caso tenha intersse, veja como integrar este passo na aplicação, acesse [aqui](https://docs.smith.langchain.com/observability). É possível encontrar todas as informações diretamenta na documentação official do LangChain neste [link](https://python.langchain.com/docs/introduction/). Quanto a documentação official do LangGraph, acesse [aqui.](https://langchain-ai.github.io/langgraph/)
 
 O RAG é uma aplicação no modelo de perguntas e respostas, onde é realizada uma busca nos nossos próprios arquivos, ao final, tanto o prompt quanto o conteúdo recuperado são passados ao modelo de llm escolhido para gerar um output mais amigável. 
 
@@ -33,7 +33,7 @@ Para  realizar a instalação das dependências citadas acima, execute no termin
 pip install langchain-google-genai langchain-chroma langchain-community langchain-text-splitters langchain-core langchain
 ```
 
-Para obter uma cópia deste repositório execute o comando:
+Para obter uma cópia deste repositório, execute o comando:
 ```bash
 git clone git@github.com:maridiniz/simple-rag-application.git
 ```
@@ -84,5 +84,5 @@ A aplicação segue cinco passos:
 
 5. O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph.
 
-# Resultado
-![](/image/)
+# Demo
+![](/image/rag_app_video.mp4)
