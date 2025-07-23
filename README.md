@@ -76,7 +76,7 @@ A aplicação segue cinco passos:
 ![](/image/data_processing.png)
 
 2. O segundo passo define todo o processo de vetorização e indexação dos arquivos que foram previamente carregados e splitados no primeiro passo. Nesse passo é utilizado um modelo de llm para transformar cada pedaço de text em embedding, que é quando é atribuído um valor numérico para cada pedaço de texto. Posteriormente, ocorre a indexação desses embeddings, que é o armazenamento em banco de dados local com o cliente Chroma.
-![](/image/embedding_indexing.png)
+
 
 
 4. O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2 e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário.
