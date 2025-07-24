@@ -8,12 +8,14 @@
 [![Downloads](https://static.pepy.tech/badge/langgraph)](https://pepy.tech/project/langgraph)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+---
 
 # Objetivo do projeto
 O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vetorização e geração do output, assim como também o Chroma client para indexação dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação. Também é possível utilizar ainda em conjunto outros frameworks para observabilidade da aplicação, como por example o LangSmith, onde é possível monitorar, realizar debbuging e etc. Existem alguns exemplos de como configurar essa etapa, caso tenha intersse, veja a [documentação oficial](https://docs.smith.langchain.com/observability). É possível encontrar todas as informações sobre todos os passos sobre RAG entre outras funcionalidades diretamenta na documentação official do [LangChain](https://python.langchain.com/docs/introduction/). Quanto a documentação official do [LangGraph](https://langchain-ai.github.io/langgraph/), também contém todas as informações necessárias.
 
 O RAG é uma aplicação no modelo de perguntas e respostas, onde é realizada uma busca nos nossos próprios arquivos, ao final, tanto a pergunta quanto o conteúdo recuperado (resposta) são passados ao modelo de LLM escolhido para gerar um output mais amigável ao usuário. 
 
+---
 
 # Setup
 Para este projeto serão necessárias as sequintes dependências:
@@ -23,6 +25,7 @@ Para este projeto serão necessárias as sequintes dependências:
 - `langchain-text-splitters >= 0.3.8`
 - `langchain-core >= 0.3.68`
 - `langchain >= 0.3.26`
+
 
 Dependências nativas:
 - `os`
@@ -69,6 +72,7 @@ if not os.environ.get("GOOGLE_API_KEY"):
   os.environ["GOOGLE_API_KEY"] = getpass.getpass("Insira sua chave de API aqui: ")
 ```
 
+
 Para observabilidade da aplicação, é possível integrar ao `LangSmith`, um framework que tem todas as funcionalidades de debbuging, monitoração etc. Comece instalando as dependências:
 ```python
 pip install -U langsmith python-dotenv
@@ -112,6 +116,8 @@ Outra alternativa sáo as variáveis de ambiente:
 [System.Environment]::SetEnvironmentVariable("LANGSMITH_API_KEY", "your_api_key_here", "User")
 ```
 É muito importante que a chave de API do modelo escolhido (ChatGpt, Gemini etc) estejam devidamente inseridas ou nas variáveis de ambiente ou mesmo configurada no script ou até mesmo através do documento .env como demonstrado nas alterantivas acima para que náo ocorram erros.
+
+---
 
 # Estrutura da Aplicação
 A aplicação segue cinco passos:
@@ -220,6 +226,7 @@ print(f"Resposta: {response.content}")
 
 O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph. Nesta etapa, definimos a sequência de qual passo será realizado primero e onde finalizar.
 
+---
 
 # Strutura do projeto
 ```text
@@ -229,6 +236,7 @@ simples-aplicação-rag
 ├── /script/rag_app.py         # Script da aplicação 
 ```
 
+---
 
 # Demo
 Neste caso demostrado abaixo, a aplicação foi inicializada no prórpio terminal com o comendo:
