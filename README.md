@@ -10,21 +10,21 @@
 
 
 # Objetivo do projeto
-O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vetorização e generação do output, assim como também o Chroma client para indexição dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação. Também é possível utilizar ainda em conjunto outros frameworks para observabilidade da nossa aplicação, como por example o LangSmith, onde é possível monitorar, realizar debug e etc. Porém, para este projeto, este último passo não será abordado, caso tenha intersse, veja como integrar este passo na aplicação, acesse [aqui](https://docs.smith.langchain.com/observability). É possível encontrar todas as informações diretamenta na documentação official do LangChain neste [link](https://python.langchain.com/docs/introduction/). Quanto a documentação official do LangGraph, acesse [aqui.](https://langchain-ai.github.io/langgraph/)
+O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vetorização e geração do output, assim como também o Chroma client para indexação dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação. Também é possível utilizar ainda em conjunto outros frameworks para observabilidade da aplicação, como por example o LangSmith, onde é possível monitorar, realizar debbuging e etc. Existem alguns exemplos de como configurar essa etapa, caso tenha intersse, veja a [documentação oficial](https://docs.smith.langchain.com/observability). É possível encontrar todas as informações diretamenta na documentação official do LangChain neste [link](https://python.langchain.com/docs/introduction/). Quanto a documentação official do LangGraph, acesse [aqui.](https://langchain-ai.github.io/langgraph/)
 
-O RAG é uma aplicação no modelo de perguntas e respostas, onde é realizada uma busca nos nossos próprios arquivos, ao final, tanto o prompt quanto o conteúdo recuperado são passados ao modelo de llm escolhido para gerar um output mais amigável. 
+O RAG é uma aplicação no modelo de perguntas e respostas, onde é realizada uma busca nos nossos próprios arquivos, ao final, tanto a pergunta quanto o conteúdo recuperado (resposta) são passados ao modelo de LLM escolhido para gerar um output mais amigável ao usuário. 
 
 
 # Setup
 Para este projeto serão necessárias as sequintes dependências:
-- `langchain-google-genai` ou `langchain_openai` entre outros modelos.
-- `langchain-chroma` dentre outros clientes.
+- `langchain-google-genai` ou `langchain_openai` entre outros [modelos](https://python.langchain.com/docs/integrations/text_embedding/) que desejar.
+- `langchain-chroma` dentre vários outros clientes [disponíveis](https://python.langchain.com/docs/integrations/vectorstores/).
 - `langchain-community >= 0.3.27`
 - `langchain-text-splitters >= 0.3.8`
 - `langchain-core >= 0.3.68`
 - `langchain >= 0.3.26`
 
-Dependências built-in:
+Dependências nativas:
 - `os`
 - `typing_extensions`
 
@@ -85,7 +85,7 @@ Em seguida, temos algumas opções de como estabelecer a observabilidade com Lan
 5 OPENAI_API_KEY="<your-openai-api-key>"
 ```
 
-Esse arquivo pode ser colocado no mesmo diretório do script da aplicação, caso haja apenas um script, mas se houver múltiplos scripts, pode ser colocado no diretório root da aplicação, ou mesmo specificar o diretório na função `load_dotenv()`, [aqui](https://pypi.org/project/python-dotenv/) tem as informações oficiais do módulo `dotenv` e os componentes.
+Esse arquivo pode ser colocado no mesmo diretório do script da aplicação, caso haja apenas um script, mas se houver múltiplos scripts, pode ser colocado no diretório root, ou mesmo specificar o diretório na função `load_dotenv()`, [aqui](https://pypi.org/project/python-dotenv/) tem as informações oficiais do módulo `dotenv` e os componentes.
 
 ```python
 # Impotando dependência:
@@ -111,7 +111,7 @@ Outra alternativa sáo as variáveis de ambiente:
 [System.Environment]::SetEnvironmentVariable("LANGSMITH_TRACING", "true", "User")
 [System.Environment]::SetEnvironmentVariable("LANGSMITH_API_KEY", "your_api_key_here", "User")
 ```
-
+É muito importante que a chave de API do modelo escolhido (ChatGpt, Gemini etc) estejam devidamente inseridas ou nas variáveis de ambiente ou mesmo configurada no script ou até mesmo através do documento .env como demonstrado nas alterantivas acima para que náo ocorram erros.
 
 # Estrutura da Aplicação
 A aplicação segue cinco passos:
