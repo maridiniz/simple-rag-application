@@ -29,7 +29,7 @@ Dependências built-in:
 - `typing_extensions`
 
 Para  realizar a instalação das dependências citadas acima, execute no terminal o comando:
-```{python}
+```python
 pip install langchain-google-genai langchain-chroma langchain-community langchain-text-splitters langchain-core langchain
 ```
 
@@ -41,25 +41,27 @@ git clone git@github.com:maridiniz/simple-rag-application.git
 
 Para prosseguir com o projeto é necessário utilizar um LLM que fará o processo de vetorização, indexação e também participará do processo de gerar o output para o usuário, por tanto,  será necessária utilizar uma chave de API de algum modelo de LLM ou utilizar um modelo local. Para definir a chave de API do modelo LLM escolhido em uma variável de ambiente:
 
-```
 1. opção através do powersehll (Método persiste mesmo após reiniciar o sistema):
+```powershell
 [System.Environment]::SetEnvironmentVariable('GOOGLE_API_KEY', 'insira aqui sua chave', 'User')
 ```
 
-```
 2. opção ataravés do CMD (Método permance mesmo após reiniciar):
+```cmd
 setx GOOGLE_API_KEY "insira-aqui-sua-chave"
 ```
 
 Para verificar se funcionou:
+```powershell
+echo $env:GOOGLE_API_KEY
 ```
-powershell: echo $env:GOOGLE_API_KEY
 
-cmd: echo %GOOGLE_API_KEY%
+```cmd
+echo %GOOGLE_API_KEY%
 ```
 
 Outra alternativa com o módulo getpass:
-```
+```python
 import getpass
 import os
 
@@ -67,14 +69,14 @@ if not os.environ.get("GOOGLE_API_KEY"):
   os.environ["GOOGLE_API_KEY"] = getpass.getpass("Insira sua chave de API aqui: ")
 ```
 
-Para observabilidade da aplicação, é possível integrar ao `LangGraph`, um framework que tem todas as funcionalidades de debbuging, monitoração etc. Comece instalando as dependências:
-```
+Para observabilidade da aplicação, é possível integrar ao `LangSmith`, um framework que tem todas as funcionalidades de debbuging, monitoração etc. Comece instalando as dependências:
+```python
 pip install -U langsmith python-dotenv
 ```
 
 Em seguida, temos algumas opções de como estabelecer a observabilidade com LangSmith, na própria [página oficial](https://docs.smith.langchain.com/observability) também tem as informações:
 
-```
+```python
 # 1. Opção é criar um arquivo com a extensão .env:
 1 LANGSMITH_TRACING="true"
 2 LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
@@ -83,7 +85,7 @@ Em seguida, temos algumas opções de como estabelecer a observabilidade com Lan
 5 OPENAI_API_KEY="<your-openai-api-key>"
 ```
 Esse arquivo deve estar no mesmo diretório do script da aplicação, depois importamos `load_dotenv` no script para que seja realizado o link:
-```
+```python
 # Impotando dependência:
 from dotenv import load_dotenv
 
@@ -94,7 +96,7 @@ load_dotenv()
 ```
 
 Outra maneira também seria pelo próprio script:
-```
+```python
 import getpass
 import os
 
@@ -103,25 +105,24 @@ os.environ["LANGSMITH_API_KEY"] = getpass.getpass()
 ```
 
 Outra alternativa sáo as variáveis de ambiente:
-```
-powershell:
+```powershell
 [System.Environment]::SetEnvironmentVariable("LANGSMITH_TRACING", "true", "User")
 [System.Environment]::SetEnvironmentVariable("LANGSMITH_API_KEY", "your_api_key_here", "User")
 ```
 
 
-# Estrutura do projeto
+# Estrutura da Aplicação
 A aplicação segue cinco passos:
 
 1. O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados do diretório onde se encontram, logo depois são contidos em um único objeto como uma unidade de texto. Ao final, essa unidade de texto é dividida em várias partes menores para que sejam futuramente transformados em embeddings.
 
 ![](/image/data_processing.png)
 
-```
+```python
 # Definindo o diretório onde estão os arquivos pdf:
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 
-directory = "./pdf_files"  # Indicamos onde está o diretório com os arquivos desejamos processar.
+directory = "../docs"  # Indicamos onde está o diretório com os arquivos desejamos processar.
 
 # Instanciando a classe que usaremos para carregar nossos arquivos:
 loaded = PyPDFDirectoryLoader(path=directory, glob="**/*.pdf")
@@ -131,7 +132,7 @@ No exemplo acima, utilizamos o PyPDFDirectoryLoader, um dos componentes do módu
 
 Uma vez nossos arquivos carregados, é realizado o processo de split destes arquivos, ou seja, o nosso objeto contém uma lista de  objetos `Document`, onde cada um desses objetos contém os textos retirados de nossos arquivos pdf, agora, esses textos serão particionados em partes menores. Esse processo facilita na etapa de embedding e indexação.
 
-```
+```python
 # Importando as dependências:
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -146,7 +147,7 @@ Agora com os arquivos devidamente repartidos em partes menores, já estamos pron
 2. O segundo passo define todo o processo de vetorização e indexação dos arquivos previamente carregados e divididos no primeiro passo. Nessa etapa é utilizado um modelo de llm para transformar cada pedaço de texto em embedding, um processo de atribuição de um valor numérico para cada pedaço de texto. Posteriormente, ocorre a indexação desses embeddings, ou seja, o armazenamento em banco de dados local (Nesse caso, foi utilizado o Chroma).
 ![](/image/indexing_embedding.png)
 
-```
+```python
 # Dependências:
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_chroma import Chroma
@@ -166,15 +167,35 @@ ids = vector_store.add_document(all_splits)  # Esta etapa indexa os vetores.
 
 Na etapa exemplificada acima é descrevido como é feito o processo de instanciar o modelo de LLM escolhido, Google GenAI, ChatGpt, Claude etc, eles seráo os responsáveis por gerar os vetores para posterior indexação pelo Chroma. Em seguida, iniciamos o banco de dados com o Chroma no diretório indicado, pois nesse caso estamos armazenando os vetores/embeddings localmente, mas é perfeitamente possível utilizar outros clientes, como por exemplo, AstraDB, FAISS, MongoDB etc, a lista com todas as opções é encontrada [aqui.](https://python.langchain.com/docs/integrations/vectorstores/) Já sobre o modelos de embeddings disponíveis, podem ser econtrados neste [link.](https://python.langchain.com/docs/integrations/text_embedding/)
 
-4. O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2, e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário através de um modelo de linguagem.
+3. O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2, e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário através de um modelo de linguagem.
 ![](/image/retieve_generation.png)
 
-5. O quarto passo é onde definimos o prompt que será passada ao llm, onde estará tanto a pergunta do usuário quanto o contexto (o conteúdo recuperado dos nossos arquivos) para que seja gerado o output.
+```python
+# Exemplo input:
+perunta = "Qual o objetivo do projeto?"
+resposta = vector_store.similarity_search(pergunta)
+print(f"Resposta: {resposta}")
+```
 
-6. O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph.
+```python
+# Output:
+Resposta: O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vetorização e generação do output, assim como também o Chroma client para indexição dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação.
+```
 
-## Directory Structure
---- nesta sessão irá o esquema de como se organizam os diretórios neste projeto ---
+
+4. O quarto passo é onde definimos o prompt que será passada ao llm, onde estará tanto a pergunta do usuário quanto o contexto (o conteúdo recuperado dos nossos arquivos) para que seja gerado o output.
+
+5. O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph.
+
+
+# Strutura do projeto
+```text
+projeto-root/
+├── /docs                      # Arquivos pdf ficam aqui.
+├── /vector_store              # Chroma DB, onde armazenamos recuperamos os vetores.
+├── /script/rag_app.py         # Script da aplicação 
+```
+
 
 # Demo
 Neste caso demostrado abaixo, a aplicação foi inicializada no prórpio terminal com o comendo:
