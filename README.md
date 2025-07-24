@@ -223,7 +223,7 @@ print(f"Resposta: {response.content}")
 
 # Strutura do projeto
 ```text
-projeto-root/
+simples-aplicação-rag
 ├── /docs                      # Arquivos pdf ficam aqui.
 ├── /vector_store              # Chroma DB, onde armazenamos recuperamos os vetores.
 ├── /script/rag_app.py         # Script da aplicação 
