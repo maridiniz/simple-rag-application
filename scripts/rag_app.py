@@ -42,12 +42,12 @@ def main():
 
 
 # 1. Passo, define o carregamento e divisão dos arquivos em partes menores:
-def text_loading_splitting(directory_path: str = "./files") -> List[Document]:
+def text_loading_splitting(directory_path: str = "../docs") -> List[Document]:
     """Carrega os documentos e divide em várias partes menores ."""
 
     # Lida com possíveis erros em diretórios ou arquivos inexistêntes:
     try:
-        if not os.path.exists("./files"):           
+        if not os.path.exists("../docs"):           
             return []
         
         loader = PyPDFDirectoryLoader(path=directory_path, glob="**/*.pdf")  
@@ -68,7 +68,7 @@ def text_loading_splitting(directory_path: str = "./files") -> List[Document]:
 
 
 # 2. Passo, responsável pela vetorização e indexação dos arquivos já processados:
-def vectorization(documents: List[Document], persist_directory: str = "../../../chroma_langchain_db"):
+def vectorization(documents: List[Document], persist_directory: str = "../vector_store"):
     """vetoriza e indexa os arquivos em um diretório local."""
 
     # create an embedding instance:
