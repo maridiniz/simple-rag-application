@@ -173,6 +173,9 @@ Na etapa exemplificada acima é descrevido como é feito o processo de instancia
 
 6. O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph.
 
+## Directory Structure
+--- nesta sessão irá o esquema de como se organizam os diretórios neste projeto ---
+
 # Demo
 Neste caso demostrado abaixo, a aplicação foi inicializada no prórpio terminal com o comendo:
 ```
