@@ -84,7 +84,9 @@ Em seguida, temos algumas opções de como estabelecer a observabilidade com Lan
 4 LANGSMITH_PROJECT="pr-crazy-formula-87"
 5 OPENAI_API_KEY="<your-openai-api-key>"
 ```
-Esse arquivo deve estar no mesmo diretório do script da aplicação, depois importamos `load_dotenv` no script para que seja realizado o link:
+
+Esse arquivo pode ser colocado no mesmo diretório do script da aplicação, caso haja apenas um script, mas se houver múltiplos scripts, pode ser colocado no diretório root da aplicação, ou mesmo specificar o diretório na função `load_dotenv()`, [aqui](https://pypi.org/project/python-dotenv/) tem as informações oficiais do módulo `dotenv` e os componentes.
+
 ```python
 # Impotando dependência:
 from dotenv import load_dotenv
@@ -182,10 +184,41 @@ print(f"Resposta: {resposta}")
 Resposta: O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vetorização e generação do output, assim como também o Chroma client para indexição dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação.
 ```
 
+Tanto a pergunta quanto a resposta são passadas para o LLM para gerar o output ao usuário, este passo é definido no passo seguinte. 
 
 4. O quarto passo é onde definimos o prompt que será passada ao llm, onde estará tanto a pergunta do usuário quanto o contexto (o conteúdo recuperado dos nossos arquivos) para que seja gerado o output.
 
-5. O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph.
+```python
+from langchain.prompts import ChatPromptTemplate
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+# Definimos o template:
+template = """
+Your are an AI assistent for answering questions based on the provide context.
+Use the following pieces of retrieved context to answer the question.
+If you don't know the answer, just say you don't know, don't try to make up an  answer.
+Keep the answer concise an to the point.
+
+Context: {context}
+
+Question: {question}
+
+Answer:
+"""
+
+# Instanciamos o template e o LLM:
+rag_template = ChatPromptTemplate.from_template(template)
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
+```
+
+```python
+# Definimos o prompt:
+message = rag_template.invoke({"question": pergunta, "context": resposta})
+response = llm.invoke(message)
+print(f"Resposta: {response.content}")
+```
+
+5. O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph. Nesta etapa, definimos a sequência de qual passo será realizado primero e onde finalizar.
 
 
 # Strutura do projeto
