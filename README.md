@@ -116,7 +116,7 @@ Outra alternativa sáo as variáveis de ambiente:
 # Estrutura da Aplicação
 A aplicação segue cinco passos:
 
-1. O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados do diretório onde se encontram, logo depois são contidos em um único objeto como uma unidade de texto. Ao final, essa unidade de texto é dividida em várias partes menores para que sejam futuramente transformados em embeddings.
+O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados do diretório onde se encontram, logo depois são contidos em um único objeto como uma unidade de texto. Ao final, essa unidade de texto é dividida em várias partes menores para que sejam futuramente transformados em embeddings.
 
 ![](/image/data_processing.png)
 
@@ -146,7 +146,7 @@ all_splits = text_splitter.split_document(documents=docs)
 ```
 Agora com os arquivos devidamente repartidos em partes menores, já estamos prontos para o próximo passo, embeddings e indexing.
 
-2. O segundo passo define todo o processo de vetorização e indexação dos arquivos previamente carregados e divididos no primeiro passo. Nessa etapa é utilizado um modelo de llm para transformar cada pedaço de texto em embedding, um processo de atribuição de um valor numérico para cada pedaço de texto. Posteriormente, ocorre a indexação desses embeddings, ou seja, o armazenamento em banco de dados local (Nesse caso, foi utilizado o Chroma).
+O segundo passo define todo o processo de vetorização e indexação dos arquivos previamente carregados e divididos no primeiro passo. Nessa etapa é utilizado um modelo de llm para transformar cada pedaço de texto em embedding, um processo de atribuição de um valor numérico para cada pedaço de texto. Posteriormente, ocorre a indexação desses embeddings, ou seja, o armazenamento em banco de dados local (Nesse caso, foi utilizado o Chroma).
 ![](/image/indexing_embedding.png)
 
 ```python
@@ -169,7 +169,7 @@ ids = vector_store.add_document(all_splits)  # Esta etapa indexa os vetores.
 
 Na etapa exemplificada acima é descrevido como é feito o processo de instanciar o modelo de LLM escolhido, Google GenAI, ChatGpt, Claude etc, eles seráo os responsáveis por gerar os vetores para posterior indexação pelo Chroma. Em seguida, iniciamos o banco de dados com o Chroma no diretório indicado, pois nesse caso estamos armazenando os vetores/embeddings localmente, mas é perfeitamente possível utilizar outros clientes, como por exemplo, AstraDB, FAISS, MongoDB etc, a lista com todas as opções é encontrada [aqui.](https://python.langchain.com/docs/integrations/vectorstores/) Já sobre o modelos de embeddings disponíveis, podem ser econtrados neste [link.](https://python.langchain.com/docs/integrations/text_embedding/)
 
-3. O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2, e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário através de um modelo de linguagem.
+O terceiro passo define o processo de busca com base nas perguntas feitas pelo usuário. É realizada uma recuperação dos arquivos indexados no diretório escolhido no passo 2, e então esse resultado, chamado de contexto é passado para o quarto passo para gerar a resposta final ao usuário através de um modelo de linguagem.
 ![](/image/retieve_generation.png)
 
 ```python
@@ -186,7 +186,7 @@ Resposta: O projeto tem o intuito apenas de demonstrar o passo a passo de uma si
 
 Tanto a pergunta quanto a resposta são passadas para o LLM para gerar o output ao usuário, este passo é definido no passo seguinte. 
 
-4. O quarto passo é onde definimos o prompt que será passada ao llm, onde estará tanto a pergunta do usuário quanto o contexto (o conteúdo recuperado dos nossos arquivos) para que seja gerado o output.
+O quarto passo é onde definimos o prompt que será passada ao llm, onde estará tanto a pergunta do usuário quanto o contexto (o conteúdo recuperado dos nossos arquivos) para que seja gerado o output.
 
 ```python
 from langchain.prompts import ChatPromptTemplate
@@ -218,7 +218,7 @@ response = llm.invoke(message)
 print(f"Resposta: {response.content}")
 ```
 
-5. O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph. Nesta etapa, definimos a sequência de qual passo será realizado primero e onde finalizar.
+O quinto e último passo é onde agrupamos todos os passos anteriores da nossa aplicação com o LangGraph. Nesta etapa, definimos a sequência de qual passo será realizado primero e onde finalizar.
 
 
 # Strutura do projeto
@@ -232,7 +232,7 @@ simples-aplicação-rag
 
 # Demo
 Neste caso demostrado abaixo, a aplicação foi inicializada no prórpio terminal com o comendo:
-```
+```python
 python rag_app.py
 ```
 ![](/image/rag_app_video.gif)
