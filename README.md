@@ -1,12 +1,8 @@
 # Aplicação RAG Simples
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![LangChain](https://img.shields.io/badge/LangChain-4CAF50?style=flat-square&logo=langchain&logoColor=black)](https://python.langchain.com)
-[![PyPI version](https://badge.fury.io/py/langchain.svg)](https://pypi.org/project/langchain/)
-[![Downloads](https://static.pepy.tech/badge/langchain)](https://pepy.tech/project/langchain)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![LangGraph](https://img.shields.io/badge/LangGraph-9E9E9E?style=flat-square&logo=python&logoColor=white)](https://langchain-ai.github.io/langgraph/)
-[![PyPI version](https://badge.fury.io/py/langgraph.svg)](https://pypi.org/project/langgraph/)
-[![Downloads](https://static.pepy.tech/badge/langgraph)](https://pepy.tech/project/langgraph)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![LangSmith](https://img.shields.io/badge/LangSmith-Enabled-blue?logo=langchain&logoColor=white)](https://smith.langchain.com/)
 
 ---
 
