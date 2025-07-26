@@ -7,50 +7,63 @@
 ---
 
 # Objetivo do projeto
-O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os components dos frameworks LangChain, langGraph e alguns components integrados como Google GenAI para os passos de vetorização e geração do output, assim como também o Chroma client para indexação dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação. Também é possível utilizar ainda em conjunto outros frameworks para observabilidade da aplicação, como por example o LangSmith, onde é possível monitorar, realizar debbuging e etc. Existem alguns exemplos de como configurar essa etapa, caso tenha intersse, veja a [documentação oficial](https://docs.smith.langchain.com/observability). É possível encontrar todas as informações sobre todos os passos sobre RAG entre outras funcionalidades diretamenta na documentação official do [LangChain](https://python.langchain.com/docs/introduction/). Quanto a documentação official do [LangGraph](https://langchain-ai.github.io/langgraph/), também contém todas as informações necessárias.
+O projeto tem o intuito apenas de demonstrar o passo a passo de uma simples aplicação RAG (Retrieval-Augmented Generation). São utilizados os componentes dos frameworks LangChain, langGraph e alguns componentes integrados como Google GenAI para os passos de vetorização e geração do output, assim como também o Chroma client para indexação dos embeddings localmente (no caso deste projeto) e posteriormente o passo de recuperação. Também é possível utilizar ainda em conjunto outros frameworks para observabilidade da aplicação, como por exemplo o LangSmith, onde é possível monitorar, realizar debugging e etc. Existem alguns exemplos de como configurar essa etapa, caso tenha interesse, veja a [documentação oficial](https://docs.smith.langchain.com/observability). É possível encontrar todas as informações sobre todos os passos sobre RAG entre outras funcionalidades diretamenta na documentação oficial do [LangChain](https://python.langchain.com/docs/introduction/). Quanto à documentação oficial do [LangGraph](https://langchain-ai.github.io/langgraph/), também contém todas as informações necessárias.
 
 O RAG é uma aplicação no modelo de perguntas e respostas, onde é realizada uma busca nos nossos próprios arquivos, ao final, tanto a pergunta quanto o conteúdo recuperado (resposta) são passados ao modelo de LLM escolhido para gerar um output mais amigável ao usuário. 
 
 ---
 
-# Setup
-Para este projeto serão necessárias as sequintes dependências:
+# Configuração do Ambiente
+
+## Pré-requisitos:
+
 - `langchain-google-genai` ou `langchain_openai` entre outros [modelos](https://python.langchain.com/docs/integrations/text_embedding/) que desejar.
 - `langchain-chroma` dentre vários outros clientes [disponíveis](https://python.langchain.com/docs/integrations/vectorstores/).
-- `langchain-community >= 0.3.27`
-- `langchain-text-splitters >= 0.3.8`
-- `langchain-core >= 0.3.68`
-- `langchain >= 0.3.26`
+- `langchain-community 0.3+`
+- `langchain-text-splitters 0.3+`
+- `langchain-core 0.3+`
+- `langchain 0.3+`
+- `langsmith 0.4+`
+- `langgraph 0.5+`
+- `python-dotenv 1.1+`
 
+## Pré-requisitos nativos:
 
-Dependências nativas:
 - `os`
 - `typing_extensions`
 
-Para  realizar a instalação das dependências citadas acima, execute no terminal o comando:
+## Instalação
+
+1. Instale as dependências:
+
 ```python
-pip install langchain-google-genai langchain-chroma langchain-community langchain-text-splitters langchain-core langchain
+pip install langchain-google-genai langchain-chroma langchain-community langchain langsmith langgraph python-dotenv
 ```
 
-Para obter uma cópia deste repositório, execute o comando:
+2. Clone este repositório:
+
 ```bash
 git clone git@github.com:maridiniz/simple-rag-application.git
 ```
 
+## Configuração da chave de API
 
-Para prosseguir com o projeto é necessário utilizar um LLM que fará o processo de vetorização, indexação e também participará do processo de gerar o output para o usuário, por tanto,  será necessária utilizar uma chave de API de algum modelo de LLM ou utilizar um modelo local. Para definir a chave de API do modelo LLM escolhido em uma variável de ambiente:
+Para prosseguir com o projeto é necessário utilizar um LLM que fará o processo de vetorização, indexação e também participará do processo de gerar o output para o usuário, por tanto,  será necessária utilizar uma chave de API de algum modelo de LLM ou utilizar um modelo local. Para definir a chave de API do modelo LLM escolhido em uma variável de ambiente.
 
-1. opção através do powersehll (Método persiste mesmo após reiniciar o sistema):
+1. Método powersehll (Persiste mesmo após reiniciar o sistema):
+
 ```powershell
 [System.Environment]::SetEnvironmentVariable('GOOGLE_API_KEY', 'insira aqui sua chave', 'User')
 ```
 
-2. opção ataravés do CMD (Método permance mesmo após reiniciar):
+2. Método CMD (Permance mesmo após reiniciar):
+
 ```cmd
 setx GOOGLE_API_KEY "insira-aqui-sua-chave"
 ```
 
-Para verificar se funcionou:
+Verifique se funcionou:
+
 ```powershell
 echo $env:GOOGLE_API_KEY
 ```
@@ -59,7 +72,8 @@ echo $env:GOOGLE_API_KEY
 echo %GOOGLE_API_KEY%
 ```
 
-Outra alternativa com o módulo getpass:
+Alternativa com o módulo getpass:
+
 ```python
 import getpass
 import os
@@ -68,16 +82,15 @@ if not os.environ.get("GOOGLE_API_KEY"):
   os.environ["GOOGLE_API_KEY"] = getpass.getpass("Insira sua chave de API aqui: ")
 ```
 
+## Observabilidade
 
-Para observabilidade da aplicação, é possível integrar ao `LangSmith`, um framework que tem todas as funcionalidades de debbuging, monitoração etc. Comece instalando as dependências:
+Para observabilidade da aplicação, é possível integrar ao `LangSmith`, um framework que possibilita debbugings, monitoração etc.
+
+Temos algumas opções de como estabelecer a observabilidade com LangSmith, na própria [página oficial](https://docs.smith.langchain.com/observability) também tem as informações:
+
+1. Através do arquivo com extensão .env:
+
 ```python
-pip install -U langsmith python-dotenv
-```
-
-Em seguida, temos algumas opções de como estabelecer a observabilidade com LangSmith, na própria [página oficial](https://docs.smith.langchain.com/observability) também tem as informações:
-
-```python
-# 1. Opção é criar um arquivo com a extensão .env:
 1 LANGSMITH_TRACING="true"
 2 LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
 3 LANGSMITH_API_KEY="<your-api-key>"
@@ -85,19 +98,20 @@ Em seguida, temos algumas opções de como estabelecer a observabilidade com Lan
 5 OPENAI_API_KEY="<your-openai-api-key>"
 ```
 
-Esse arquivo pode ser colocado no mesmo diretório do script da aplicação, caso haja apenas um script, mas se houver múltiplos scripts, pode ser colocado no diretório root, ou mesmo specificar o diretório na função `load_dotenv()`, [aqui](https://pypi.org/project/python-dotenv/) tem as informações oficiais do módulo `dotenv` e os componentes.
+Esse arquivo pode ser colocado no mesmo diretório do script da aplicação, caso haja apenas um script, mas se houver múltiplos scripts que utilizam este arquivo, pode ser colocado no diretório principal, ou mesmo specificar o diretório como argumento na função `load_dotenv()`, [aqui](https://pypi.org/project/python-dotenv/) tem as informações oficiais do módulo `dotenv` e seus componentes.
 
 ```python
 # Impotando dependência:
 from dotenv import load_dotenv
 
-# A função carrega as variáveis do arquivo `.env`:
+# A função carrega as variáveis contidas no arquivo `.env`:
 load_dotenv()
 
 # --- Restante da aplicação ---
 ```
 
-Outra maneira também seria pelo próprio script:
+2. Através do próprio script da aplicação:
+
 ```python
 import getpass
 import os
@@ -106,19 +120,21 @@ os.environ["LANGSMITH_TRACING"] = "true"
 os.environ["LANGSMITH_API_KEY"] = getpass.getpass()
 ```
 
-Outra alternativa sáo as variáveis de ambiente:
+3. Através das variáveis de ambiente:
+
 ```powershell
 [System.Environment]::SetEnvironmentVariable("LANGSMITH_TRACING", "true", "User")
 [System.Environment]::SetEnvironmentVariable("LANGSMITH_API_KEY", "your_api_key_here", "User")
 ```
-É muito importante que a chave de API do modelo escolhido (ChatGpt, Gemini etc) estejam devidamente inseridas ou nas variáveis de ambiente ou mesmo configurada no script ou até mesmo através do documento .env como demonstrado nas alterantivas acima para que náo ocorram erros.
+É muito importante que a chave de API do modelo escolhido (ChatGpt, Gemini etc) estejam devidamente configuradas nas variáveis de ambiente com qualquer um dos métodos citados, para que náo ocorram erros.
 
 ---
 
 # Estrutura da Aplicação
+
 A aplicação segue cinco passos:
 
-O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados do diretório onde se encontram, logo depois são contidos em um único objeto como uma unidade de texto. Ao final, essa unidade de texto é dividida em várias partes menores para que sejam futuramente transformados em embeddings.
+O primeiro passo é uma função que define toda a lógica para o processamento dos arquivos que serão futuramente vetorizados e indexados em um diretório local. Primeiro, os arquivos são carregados do diretório onde se encontram, logo depois são contidos em um único objeto como uma unidade de texto. Ao final, essa unidade de texto é dividida em várias partes menores para que sejam futuramente transformadas em embeddings.
 
 ![](/image/data_processing.png)
 
@@ -225,16 +241,29 @@ O quinto e último passo é onde agrupamos todos os passos anteriores da nossa a
 ---
 
 # Strutura do projeto
+
 ```text
-simples-aplicação-rag
-├── /docs                      # Arquivos pdf ficam aqui.
-├── /vector_store              # Chroma DB, onde armazenamos recuperamos os vetores.
-├── /script/rag_app.py         # Script da aplicação 
+.
+├── 📦 simple-rag-application/
+│   ├── 📂 docs                           # Arquivos pdf
+│   │   └── 📄 visão_do_projeto.pdf
+│   ├── 📂 image                          # Fluxo dos passos da aplicação e demo
+│   │   ├── data_processing.png
+│   │   ├── indexing_embedding.png
+│   │   ├── rag_app_video.gif
+│   │   └── retieve_generation.png
+│   └── 📂 script                         # Código fonte da aplicação e arquivo .env
+│       ├── 🐍📄 rag_app.py
+│       ├── .env                          # Arquivo .env (Opcional)
+│       └── vector_store                  # Armazenamento dos vetores.
+├── License                               # Licença MIT.
+└── README.md                             # Visão geral do projeto.
 ```
 
 ---
 
 # Demo
+
 Neste caso demostrado abaixo, a aplicação foi inicializada no prórpio terminal com o comendo:
 ```python
 python rag_app.py
