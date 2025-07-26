@@ -254,7 +254,7 @@ O quinto e último passo é onde agrupamos todos os passos anteriores da nossa a
 │   │   └── retieve_generation.png
 │   └── 📂 script                         # Código fonte da aplicação e arquivo .env
 │       ├── 🐍📄 rag_app.py
-│       ├── .env                          # Arquivo .env (Opcional)
+│       ├── ⚙️.env                          # Arquivo .env (Opcional)
 │       └── vector_store                  # Armazenamento dos vetores.
 ├── License                               # Licença MIT.
 └── README.md                             # Visão geral do projeto.
