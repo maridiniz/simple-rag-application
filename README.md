@@ -240,7 +240,7 @@ O quinto e último passo é onde agrupamos todos os passos anteriores da nossa a
 
 ---
 
-# Strutura do projeto
+# Estrutura do projeto
 
 ```text
 .
